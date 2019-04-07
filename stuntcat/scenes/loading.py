@@ -5,6 +5,7 @@ import pygame as pg
 
 class LoadingScene(Scene):
     def __init__(self, *args, **kwargs):
+        self.rewards = 0
         Scene.__init__(self, *args, **kwargs)
 
         # Loading screen should always be a fallback active scene
@@ -19,12 +20,15 @@ class LoadingScene(Scene):
         return [self.screen.get_rect()]
 
     def tick(self, dt):
+        self.rewards = -1
         self.timer += dt
 
         if self.timer > 10000:
             self.next()
+        return self.rewards
 
     def next(self):
+        self.rewards = 0
         self._game.scenes.remove(self)
         self._game.add_cat_scene()
         self.active = False

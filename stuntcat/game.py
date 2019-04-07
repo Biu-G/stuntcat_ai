@@ -15,6 +15,7 @@ class Game:
     FPS = 30
 
     def __init__(self):
+        self.rewards = 0
         pygame.mixer.pre_init(44100,-16,2, 512)
         pygame.init()
         pygame.font.init()
@@ -44,12 +45,15 @@ class Game:
         If a scene responds with a truthy value, the tick will
         continue to be propagated.
         """
+        self.rewards = 0
         for i in self.scenes[::-1]:
             if i.active:
-                if not i.tick(dt):
-                    break
+                #if not i.tick(dt):
+                 #   break
+                self.rewards = i.tick(dt)
 
         self.clock.tick(self.FPS)
+        return self.rewards
 
     def render(self):
         """ Propagate a render to the highest active scene.
@@ -73,6 +77,7 @@ class Game:
                     break
         # print(all_rects)
         pygame.display.update(all_rects)
+        return pygame.surfarray.array3d(pygame.display.get_surface())
 
     def events(self, events):
         """
@@ -97,11 +102,11 @@ class Game:
         dt = 0
         while self.running:
             fs = time.time()
-            self.tick(dt)
-            self.render()
+            ticker = self.tick(dt)
+            renderer = self.render()
             #events = pygame.event.get()
             #self.gambling.say()
-            events = self.gambling.fight()
+            events = self.gambling.fight(renderer, ticker)
             self.events(events)
             dt = (time.time() - fs) * 1000
             if self.gifmaker is not None:

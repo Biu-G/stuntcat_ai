@@ -956,6 +956,7 @@ class CatUniScene(Scene):
                 )
         if self.rewards == 0:
             self.rewards = self.score - self.score_last_frame
+        return self.rewards
 
     def event(self, event):
         width, height = self.width, self.height
