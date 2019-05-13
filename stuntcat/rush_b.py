@@ -7,15 +7,15 @@ import numpy as np
 from collections import deque
 import os
 GAME = "stuntcat"
-ACTIONS = 256
-GAMMA = 0.99
+ACTIONS = 8
+GAMMA = 0.87
 #OBSERVE = 100000.
-OBSERVE = 100.
-EXPLORE = 200000.
+OBSERVE = 48.
+EXPLORE = 2200000.
 #EXPLORE = 2000000.
-FINAL_EPSILON = 0.0001
+FINAL_EPSILON = 0.01
 #INITIAL_EPSILON = 0.0001
-INITIAL_EPSILON = 0.4
+INITIAL_EPSILON = 0.13
 REPLAY_MEMORY = 50000
 BATCH = 32
 FRAME_PER_ACTION = 1
@@ -46,7 +46,10 @@ class Gambling:
         W_fc1 = self.weight_variable([1600, 768])
         b_fc1 = self.bias_variable([768])
 
-        W_fc2 = self.weight_variable([768, ACTIONS])
+        W_fcs = self.weight_variable([768,128])
+        b_fcs = self.weight_variable([128])
+
+        W_fc2 = self.weight_variable([128, ACTIONS])
         b_fc2 = self.bias_variable([ACTIONS])
 
         # input layer
@@ -66,9 +69,10 @@ class Gambling:
         h_conv3_flat = tf.reshape(h_conv3, [-1, 1600])
 
         h_fc1 = tf.nn.relu(tf.matmul(h_conv3_flat, W_fc1) + b_fc1)
+        h_fcs = tf.nn.relu(tf.matmul(h_fc1, W_fcs) + b_fcs)
 
         # readout layer
-        readout = tf.matmul(h_fc1, W_fc2) + b_fc2
+        readout = tf.matmul(h_fcs, W_fc2) + b_fc2
 
         return self.s, readout
 
@@ -171,7 +175,7 @@ class Gambling:
             self.s_t = s_t1
 
             # save progress every 10000 iterations
-            if self.t % 10000 == 0:
+            if self.t % 100000 == 0:
                 self.saver.save(self.sess, 'saved_networks/' + GAME + '-dqn', global_step=self.t)
 
             # print info
@@ -203,21 +207,21 @@ class Gambling:
                 act = i
                 break
         res = []
-        if (act & (1<<0)) > 0:
+        if act == 0:
             res.append(pygame.event.Event(pygame.KEYDOWN, {"key":pygame.K_LEFT, "mod":0, "unicode":u' '}))
-        if (act & (1<<1)) > 0:
+        if act == 1:
             res.append(pygame.event.Event(pygame.KEYDOWN, {"key":pygame.K_RIGHT, "mod":0, "unicode":u' '}))
-        if (act & (1<<2)) > 0:
+        if act == 2:
             res.append(pygame.event.Event(pygame.KEYDOWN, {"key":pygame.K_UP, "mod":0, "unicode":u' '}))
-        if (act & (1<<3)) > 0:
+        if act == 3:
             res.append(pygame.event.Event(pygame.KEYUP, {"key":pygame.K_LEFT, "mod":0, "unicode":u' '}))
-        if (act & (1<<4)) > 0:
+        if act == 4:
             res.append(pygame.event.Event(pygame.KEYUP, {"key":pygame.K_RIGHT, "mod":0, "unicode":u' '}))
-        if (act & (1 << 5)) > 0:
+        if act == 5:
             res.append(pygame.event.Event(pygame.KEYUP, {"key": pygame.K_UP, "mod": 0, "unicode": u' '}))
-        if (act & (1<<6)) > 0:
+        if act == 6:
             res.append(pygame.event.Event(pygame.KEYDOWN, {"key":pygame.K_a, "mod":0, "unicode":u' '}))
-        if (act & (1<<7)) > 0:
+        if act == 7:
             res.append(pygame.event.Event(pygame.KEYDOWN, {"key":pygame.K_d, "mod":0, "unicode":u' '}))
         self.actors = act
         return res

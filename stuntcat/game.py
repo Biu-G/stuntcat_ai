@@ -103,6 +103,7 @@ class Game:
         while self.running:
             fs = time.time()
             ticker = self.tick(dt)
+            #print("tick is, ", ticker)
             renderer = self.render()
             #events = pygame.event.get()
             #self.gambling.say()
