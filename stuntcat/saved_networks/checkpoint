@@ -1,5 +1,6 @@
-model_checkpoint_path: "stuntcat-dqn-400000"
+model_checkpoint_path: "stuntcat-dqn-500000"
 all_model_checkpoint_paths: "stuntcat-dqn-100000"
 all_model_checkpoint_paths: "stuntcat-dqn-200000"
 all_model_checkpoint_paths: "stuntcat-dqn-300000"
 all_model_checkpoint_paths: "stuntcat-dqn-400000"
+all_model_checkpoint_paths: "stuntcat-dqn-500000"
