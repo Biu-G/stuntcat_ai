@@ -1,4 +1,6 @@
-
+business contact: QQ 403113270 WECHAT x403113270 QQMAIL 403113270@qq.com GMAIL htlzkahsy@gmail.com
+(I CAN HACK/CRACK^
+**********************AI VERSION FOR PYGAME EXAMPLE***********************
 
 # 🐱‍🏍 — the first pygame 2 community game. Starting now! Are you in?
 
