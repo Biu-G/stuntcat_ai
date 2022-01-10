@@ -1,0 +1,2 @@
+model_checkpoint_path: "stuntcat-dqn-100000"
+all_model_checkpoint_paths: "stuntcat-dqn-100000"
